@@ -1,7 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { errorHandler } from "./utils/ErrorHandler";
+import errorHandler from "./middleware/error.middleware.js";
 const app = express();
 
 //use cookies middleware to maintain sessions
