@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { errorHandler } from "./utils/ErrorHandler";
 const app = express();
 
 //use cookies middleware to maintain sessions
@@ -22,6 +23,9 @@ app.use(
 
 // use express public to serve static files
 app.use(express.static("public/temp"));
+
+// uses custom errorHandler midddleware
+app.use(errorHandler);
 
 app.get("/", (req, res) => {
     res.send("Hello World");
