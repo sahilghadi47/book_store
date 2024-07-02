@@ -1,0 +1,91 @@
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+const userSchema = new mongoose.Schema(
+    {
+        username: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            trin: true,
+            index: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            trin: true,
+            index: true,
+        },
+
+        fullName: {
+            type: String,
+            required: true,
+            index: true,
+        },
+        password: {
+            type: String,
+            required: true,
+        },
+        role: {
+            type: String,
+            default: "user",
+            enum: ["user", "admin"],
+        },
+        refreshToken: {
+            type: String,
+            default: null,
+        },
+    },
+    {
+        timestamps: true,
+    },
+);
+
+const User = mongoose.model("User", userSchema);
+
+userSchema.methods.toJSON = function () {
+    const userObject = this.toObject();
+    delete userObject.password;
+    delete userObject.__v;
+    return userObject;
+};
+
+userSchema.methods.generateAccessToken = function () {
+    return jwt.sign(
+        {
+            _id: this._id,
+            username: this.username,
+            email: this.email,
+            fullName: this.fullName,
+            role: this.role,
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.ACCESS_TOKEN_EXPIRY },
+    );
+};
+
+userSchema.methods.generateRefreshToken = function () {
+    return jwt.sign(
+        {
+            _id: this._id,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: process.env.REFRESH_TOKEN_EXPIRY },
+    );
+};
+
+userSchema.methods.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
+
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    this.password = bcrypt.hashSync(this.password, 10);
+    next();
+});
+
+export default User;
