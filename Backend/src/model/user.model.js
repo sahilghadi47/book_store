@@ -19,6 +19,14 @@ const userSchema = new mongoose.Schema(
             lowercase: true,
             trin: true,
             index: true,
+            validate: {
+                validator: function (v) {
+                    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                        v,
+                    );
+                },
+                message: "Please enter a valid email",
+            },
         },
 
         fullName: {
@@ -29,6 +37,15 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
+            validate: {
+                validator: function (v) {
+                    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+                        v,
+                    );
+                },
+                message:
+                    "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+            },
         },
         role: {
             type: String,
