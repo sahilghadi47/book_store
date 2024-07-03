@@ -6,4 +6,15 @@ class ResponseHandler {
         this.success = statusCode >= 200 && statusCode < 400;
     }
 }
-export default ResponseHandler;
+
+class SuccessResponse extends ResponseHandler {
+    constructor(message, data = {}) {
+        super(200, message, data);
+    }
+}
+class CreatedResponse extends ResponseHandler {
+    constructor(message, data = {}) {
+        super(201, message, data);
+    }
+}
+export { SuccessResponse, CreatedResponse, ResponseHandler };
