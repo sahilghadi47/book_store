@@ -16,7 +16,7 @@ const verifyJwt = async (req, res, next) => {
             );
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         if (!decoded) throw new UnauthorisedError(401, "Invalid access token");
 
         const user = await User.findById(decoded?._id).select("-password");
