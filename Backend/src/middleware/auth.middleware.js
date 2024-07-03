@@ -4,6 +4,7 @@ import {
     CustomError,
     NotFoundError,
     UnauthorisedError,
+    ForbiddenError,
 } from "../utils/ErrorHandler.js";
 
 const verifyJwt = async (req, res, next) => {
@@ -32,4 +33,17 @@ const verifyJwt = async (req, res, next) => {
     }
 };
 
-export { verifyJwt };
+const hasRole = (role) => {
+    return (req, res, next) => {
+        try {
+            if (req?.user.role !== role) {
+                throw new ForbiddenError("Access control denied");
+            }
+            next();
+        } catch (error) {
+            next(error);
+        }
+    };
+};
+
+export { verifyJwt, hasRole };

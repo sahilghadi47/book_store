@@ -15,6 +15,12 @@ class UnauthorisedError extends CustomError {
     }
 }
 
+class ForbiddenError extends CustomError {
+    constructor(message, error = []) {
+        super(403, message, error);
+    }
+}
+
 class NotFoundError extends CustomError {
     constructor(message, error = []) {
         super(404, message, error);
@@ -40,6 +46,7 @@ class ServiceUnavailableError extends CustomError {
 export {
     CustomError,
     UnauthorisedError,
+    ForbiddenError,
     NotFoundError,
     BadRequestError,
     InternalServerError,

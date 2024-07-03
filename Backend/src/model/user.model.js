@@ -68,6 +68,9 @@ userSchema.methods.toJSON = function () {
     const userObject = this.toObject();
     delete userObject.password;
     delete userObject.__v;
+    delete userObject.refreshToken;
+    delete userObject.createdAt;
+    delete userObject.updatedAt;
     return userObject;
 };
 
