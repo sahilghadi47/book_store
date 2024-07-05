@@ -1,5 +1,5 @@
 import User from "../model/user.model.js";
-import functionHandler from "../utils/functionHandler.js";
+import { functionHandler } from "../utils/functionHandler.js";
 import {
     ResponseHandler as Response,
     SuccessResponse as Success,
