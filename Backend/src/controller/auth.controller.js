@@ -1,5 +1,5 @@
 import User from "../model/user.model.js";
-import functionHandler from "../utils/functionHandler.js";
+import { functionHandler } from "../utils/functionHandler.js";
 import {
     ResponseHandler as Response,
     SuccessResponse as Success,
@@ -17,17 +17,16 @@ import generateTokens from "../utils/generateTokens.js";
 
 const registerUser = functionHandler(async (req, res) => {
     try {
-        const { username, fullName, email, password } = req.body;
-        if (!username || !fullName || !email || !password)
+        const { fullName, email, password } = req.body;
+        if (!fullName || !email || !password)
             throw new BadRequestError("Please provide all the required fields");
 
         const exitingUser = await User.findOne({
-            $or: [{ username }, { email }],
+            $or: [{ email }],
         });
         if (exitingUser) throw new BadRequestError("User already exists");
 
         const user = await User.create({
-            username,
             fullName,
             email,
             password,
