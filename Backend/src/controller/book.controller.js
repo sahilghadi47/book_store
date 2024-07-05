@@ -89,7 +89,7 @@ const addBook = functionHandler(async (req, res) => {
         if (!title || !author || !summary || !category || !price) {
             throw new BadRequestError("All fields are required");
         }
-        const file = req.file ? req.file.filename : "";
+        const file = req.file ? req.file.path : "";
 
         const book = await Book.create({
             title,
