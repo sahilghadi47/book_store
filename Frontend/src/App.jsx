@@ -1,12 +1,16 @@
-import React from 'react'
-
+import React from "react";
+import { Register, Login, Header, Footer } from "./components";
 
 function App() {
-  return (
-    <main className='w-screen h-screen'>
-
-    </main>
-  )
+	return (
+		<>
+			<Header />
+			<main className="flex-1">
+				<Login />
+			</main>
+			<Footer />
+		</>
+	);
 }
 
-export default App
+export default App;
