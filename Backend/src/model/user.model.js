@@ -4,20 +4,12 @@ import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
     {
-        username: {
-            type: String,
-            required: true,
-            unique: true,
-            lowercase: true,
-            trin: true,
-            index: true,
-        },
         email: {
             type: String,
             required: true,
             unique: true,
             lowercase: true,
-            trin: true,
+            trim: true,
             index: true,
             validate: {
                 validator: function (v) {
@@ -28,7 +20,6 @@ const userSchema = new mongoose.Schema(
                 message: "Please enter a valid email",
             },
         },
-
         fullName: {
             type: String,
             required: true,
@@ -56,6 +47,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: null,
         },
+        address: {
+            type: mongoose.Schema.ObjectId,
+            ref: "Address",
+        },
     },
     {
         timestamps: true,
@@ -76,7 +71,6 @@ userSchema.methods.generateAccessToken = function () {
     return jwt.sign(
         {
             _id: this._id,
-            username: this.username,
             email: this.email,
             fullName: this.fullName,
             role: this.role,
@@ -102,8 +96,12 @@ userSchema.methods.comparePassword = async function (password) {
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
-    this.password = bcrypt.hashSync(this.password, 10);
-    next();
+    try {
+        this.password = await bcrypt.hash(this.password, 10);
+        next();
+    } catch (err) {
+        next(err);
+    }
 });
 
 const User = mongoose.model("User", userSchema);
