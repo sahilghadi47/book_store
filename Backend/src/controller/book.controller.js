@@ -3,11 +3,7 @@ import { functionHandler } from "../utils/functionHandler.js";
 import {
     CustomError,
     NotFoundError,
-    UnauthorisedError,
-    ForbiddenError,
-    ServiceUnavailableError,
     BadRequestError,
-    InternalServerError,
 } from "../utils/ErrorHandler.js";
 import {
     SuccessResponse as success,
@@ -17,10 +13,31 @@ import { cloudDelete, cloudUpload } from "../utils/cloudStorage.js";
 
 const getBooks = functionHandler(async (req, res) => {
     try {
+        const { category, sortBy, sortOrder, page, limit } = req.query;
+
+        // Setting default values for pagination
+        const pageNumber = parseInt(page) || 1;
+        const resultsPerPage = parseInt(limit) || 10;
+        const skip = (pageNumber - 1) * resultsPerPage;
+
+        // Building the match object for filtering
+        const match = {};
+        if (category) {
+            match.category = category;
+        }
+
+        // Building the sort object for sorting
+        const sort = {};
+        if (sortBy) {
+            sort[sortBy] = sortOrder === "desc" ? -1 : 1;
+        }
+
+        // Querying the database with aggregation pipeline
         const books = await Book.aggregate([
-            {
-                $match: {},
-            },
+            { $match: match },
+            { $sort: sort },
+            { $skip: skip },
+            { $limit: resultsPerPage },
             {
                 $project: {
                     title: 1,
@@ -33,15 +50,15 @@ const getBooks = functionHandler(async (req, res) => {
                 },
             },
         ]);
+
         if (books.length === 0) {
             throw new NotFoundError("No books found");
         }
 
-        const response = new success("Books featched successfully", books);
-
+        const response = new success("Books fetched successfully", books);
         res.status(response.statusCode).json(response);
     } catch (error) {
-        throw new CustomError(error.message, error.statusCode);
+        throw new CustomError(error.message);
     }
 });
 
@@ -93,7 +110,7 @@ const addBook = functionHandler(async (req, res) => {
 
         res.status(response.statusCode).json(response);
     } catch (error) {
-        throw new CustomError(error.message, error.statusCode);
+        throw new CustomError(error.message);
     }
 });
 
@@ -117,7 +134,7 @@ const deleteBook = functionHandler(async (req, res) => {
 
         res.status(response.statusCode).json(response);
     } catch (error) {
-        throw new CustomError(error.message, error.statusCode);
+        throw new CustomError(error.message);
     }
 });
 
@@ -147,7 +164,7 @@ const updateBook = functionHandler(async (req, res) => {
 
         res.status(response.statusCode).json(response);
     } catch (error) {
-        throw new CustomError(error.message, error.statusCode);
+        throw new CustomError(error.message);
     }
 });
 
@@ -189,7 +206,7 @@ const searchBook = functionHandler(async (req, res) => {
         const response = new success("Books featched successfully", books);
         return res.status(response.statusCode).json(response);
     } catch {
-        throw new CustomError(error.message, error.statusCode);
+        throw new CustomError(error.message);
     }
 });
 

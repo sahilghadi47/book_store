@@ -32,6 +32,9 @@ app.get("/", (req, res) => {
 });
 
 import authRoute from "./routes/auth.route.js";
+import bookRoute from "./routes/book.route.js";
+
+app.use("/api/v1/book", bookRoute);
 
 app.use("/api/v1/auth", authRoute);
 
