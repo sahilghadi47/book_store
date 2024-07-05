@@ -192,3 +192,5 @@ const searchBook = functionHandler(async (req, res) => {
         throw new CustomError(error.message, error.statusCode);
     }
 });
+
+export { getBooks, getBookById, addBook, deleteBook, updateBook, searchBook };

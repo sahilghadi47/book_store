@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
-import { CustomError } from "./ErrorHandler";
+import { InternalServerError } from "./ErrorHandler";
 dotenv.config({
     path: ".env",
 });
@@ -20,7 +20,7 @@ const cloudUpload = async (localFilePath) => {
 
         return response;
     } catch (error) {
-        throw new CustomError(501, error.message, error?.error, error?.stack);
+        throw new InternalServerError(error.message);
     }
 };
 
@@ -29,7 +29,7 @@ const cloudDelete = async (public_id) => {
         const response = await cloudinary.uploader.destroy(public_id);
         return response;
     } catch (error) {
-        throw new CustomError(501, error.message, error?.error, error?.stack);
+        throw new InternalServerError(error.message);
     }
 };
 
