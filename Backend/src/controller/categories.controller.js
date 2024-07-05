@@ -16,22 +16,17 @@ const addCategories = functionHandler(async (req, res) => {
         const { name } = req.body;
         if (!name) throw new BadRequestError("Name is required");
 
-        const newCategories = await Categories.create({ name });
-        const response = new created("new category added", newCategories);
+        const newCategoriy = await Categories.create({ name });
+        const response = new created("new category added", newCategoriy);
 
         return res.status(response.statusCode).json(response);
     } catch (error) {
-        throw new CustomError(error?.status, error.message);
+        throw new CustomError(error.message);
     }
 });
 
 const deleteCategories = functionHandler(async (req, res) => {
     try {
-        const user = req.user;
-        if (!user)
-            throw new UnauthorisedError(
-                "You must be logged in to delete a category",
-            );
         const { categoryId } = req.params;
         if (!categoryId) throw new BadRequestError("category id is required");
 
@@ -42,8 +37,21 @@ const deleteCategories = functionHandler(async (req, res) => {
 
         return res.status(response.statusCode).json(response);
     } catch (error) {
-        throw new CustomError(error?.status, error.message);
+        throw new CustomError(error.message);
     }
 });
 
-export { deleteCategories, addCategories };
+const getCategories = functionHandler(async (req, res) => {
+    try {
+        const categories = await Categories.find();
+        const response = new success(
+            "categories fetched successfully",
+            categories,
+        );
+
+        return res.status(response.statusCode).json(response);
+    } catch (error) {
+        throw new CustomError(error.message);
+    }
+});
+export { deleteCategories, addCategories, getCategories };
