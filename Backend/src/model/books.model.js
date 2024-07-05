@@ -15,8 +15,7 @@ const bookSchema = new mongoose.Schema(
             required: true,
         },
         category: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Category",
+            type: String,
             required: true,
         },
         price: {
@@ -24,8 +23,11 @@ const bookSchema = new mongoose.Schema(
             required: true,
         },
         cover: {
-            type: String,
-            default: "",
+            type: Object,
+            default: {
+                url: "",
+                publicId: "",
+            },
         },
         stock: {
             type: Number,
@@ -38,11 +40,27 @@ const bookSchema = new mongoose.Schema(
     },
 );
 
+bookSchema.toJSON = function () {
+    const book = this.toObject();
+    delete book.updatedAt;
+    delete book.createdAt;
+    delete book.__v;
+    return book;
+};
+
+bookSchema.pre("save", function (next) {
+    this.title = this.title.toLowerCase();
+    this.author = this.author.toLowerCase();
+    this.summary = this.summary.toLowerCase();
+    next();
+});
+
 const Book = mongoose.model("Book", bookSchema);
 
-Book.createIndexes({
+bookSchema.indexes({
     title: "text",
     author: "text",
+    summary: "text",
 });
 
 export default Book;
