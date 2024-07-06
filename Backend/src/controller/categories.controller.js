@@ -6,7 +6,6 @@ import {
 } from "../utils/ResponseHandler.js";
 import {
     BadRequestError,
-    UnauthorisedError,
     CustomError,
     NotFoundError,
 } from "../utils/ErrorHandler.js";

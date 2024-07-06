@@ -205,7 +205,7 @@ const searchBook = functionHandler(async (req, res) => {
 
         const response = new success("Books featched successfully", books);
         return res.status(response.statusCode).json(response);
-    } catch {
+    } catch (error) {
         throw new CustomError(error.message);
     }
 });

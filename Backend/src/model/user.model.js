@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
             index: true,
             validate: {
                 validator: function (v) {
-                    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                    return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
                         v,
                     );
                 },

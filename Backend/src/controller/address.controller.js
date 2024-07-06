@@ -5,6 +5,7 @@ import {
     CustomError,
     NotFoundError,
     UnAuthorizedError,
+    InternalServerError,
 } from "../utils/ErrorHandler.js";
 import {
     SuccessResponse as success,
@@ -43,7 +44,7 @@ const addAddress = functionHandler(async (req, res) => {
 
         return res.status(response.statusCode).json(response);
     } catch (error) {
-        if (error instanceof ValidationError) {
+        if (error.name === "ValidationError") {
             const response = new BadRequestError(error.message);
             return res.status(response.statusCode).json(response);
         }

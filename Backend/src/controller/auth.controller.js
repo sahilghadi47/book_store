@@ -1,7 +1,6 @@
 import User from "../model/user.model.js";
 import { functionHandler } from "../utils/functionHandler.js";
 import {
-    ResponseHandler as Response,
     SuccessResponse as Success,
     CreatedResponse as Created,
 } from "../utils/ResponseHandler.js";
@@ -50,8 +49,6 @@ const registerUser = functionHandler(async (req, res) => {
             .cookie("accessToken", accessToken, cookieOptions)
             .json(response);
     } catch (error) {
-        console.log(error);
-
         if (error.name === "ValidationError") {
             throw new BadRequestError(error.message);
         }

@@ -38,7 +38,8 @@ const addToCart = functionHandler(async (req, res) => {
 
     cart.books.push({ booksID, quantity: quantity || 1 });
     await cart.save();
-    return new success("Book added to cart successfully", cart);
+    const response = new success("Book added to cart successfully", cart);
+    return res.status(response.statusCode).json(response);
 });
 
 const getCart = functionHandler(async (req, res) => {
@@ -57,7 +58,8 @@ const getCart = functionHandler(async (req, res) => {
         throw new NotFoundError("Cart not found");
     }
 
-    return new success("Cart fetched successfully", cart);
+    const response = new success("Cart fetched successfully", cart);
+    return res.status(response.statusCode).json(response);
 });
 
 const removeFromCart = functionHandler(async (req, res) => {
@@ -83,5 +85,8 @@ const removeFromCart = functionHandler(async (req, res) => {
 
     cart.books = cart.books.filter((book) => book.booksID !== booksID);
     await cart.save();
-    return new success("Book removed from cart successfully", cart);
+    const response = new success("Book removed from cart successfully", cart);
+    return res.status(response.statusCode).json(response);
 });
+
+export { addToCart, getCart, removeFromCart };

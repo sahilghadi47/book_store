@@ -5,7 +5,7 @@ import {
     updateTokens,
     logoutUser,
 } from "../controller/auth.controller.js";
-import { verifyJwt, hasRole } from "../middleware/auth.middleware.js";
+import { verifyJwt } from "../middleware/auth.middleware.js";
 
 const authRoute = Router();
 
