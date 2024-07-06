@@ -138,5 +138,101 @@ const logoutUser = functionHandler(async (req, res) => {
         throw new CustomError(error.status, error.message, error, error?.stack);
     }
 });
+const updatePassword = functionHandler(async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        if (!oldPassword || !newPassword)
+            throw new BadRequestError("Please provide all the required fields");
 
-export { registerUser, loginUser, updateTokens, logoutUser };
+        const user = await User.findById(req.user._id);
+        if (!user) throw new UnauthorisedError("User not found");
+
+        const isPasswordCorrect = await user.comparePassword(oldPassword);
+        if (!isPasswordCorrect)
+            throw new UnauthorisedError("Invalid User credentials");
+
+        user.password = newPassword;
+        await user.save();
+
+        const response = new Success(
+            "Password successfully updated",
+            user.toJSON(),
+        );
+
+        return res.status(200).json(response);
+    } catch (error) {
+        throw new CustomError(error.status, error.message, error, error?.stack);
+    }
+});
+
+const updateUserRole = functionHandler(async (req, res) => {
+    try {
+        const userid = req.user?._id;
+        if (!userid) throw new UnauthorisedError("User not found");
+
+        const { role } = req.body;
+        if (!role)
+            throw new BadRequestError("Please provide all the required fields");
+
+        const user = await User.findById(req.user._id);
+        if (!user) throw new UnauthorisedError("User not found");
+
+        user.role = role;
+        await user.save();
+
+        const response = new Success(
+            "Role successfully updated",
+            user.toJSON(),
+        );
+
+        return res.status(200).json(response);
+    } catch (error) {
+        throw new CustomError(error.status, error.message, error, error?.stack);
+    }
+});
+
+const getAllUsers = functionHandler(async (req, res) => {
+    try {
+        const userid = req.user?._id;
+        const user = await User.findById(userid);
+        if (!user) throw new UnauthorisedError("User not found");
+        if (user.role !== "admin")
+            throw new UnauthorisedError("You are not authorized");
+
+        const users = await User.find();
+        const response = new Success("Users fetched successfully", users);
+
+        return res.status(200).json(response);
+    } catch (error) {
+        throw new CustomError(error.status, error.message, error, error?.stack);
+    }
+});
+const deleteUser = functionHandler(async (req, res) => {
+    try {
+        const admin = req.user;
+        if (!admin) throw new UnauthorisedError("User not found");
+
+        if (admin.role !== "admin")
+            throw new UnauthorisedError("You are not authorized");
+        const { id } = req.params;
+
+        if (!id) throw new BadRequestError("Please provide user id");
+
+        const user = await User.findByIdAndDelete(id);
+        const response = new Success("Users fetched successfully", user);
+
+        return res.status(200).json(response);
+    } catch (error) {
+        throw new CustomError(error.status, error.message, error, error?.stack);
+    }
+});
+export {
+    registerUser,
+    loginUser,
+    updateTokens,
+    logoutUser,
+    updatePassword,
+    updateUserRole,
+    getAllUsers,
+    deleteUser,
+};
