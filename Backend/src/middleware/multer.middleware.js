@@ -1,5 +1,5 @@
 import { diskStorage } from "multer";
-import * as multer from "multer";
+import multer from "multer";
 
 const storage = diskStorage({
     destination: (req, file, cb) => {

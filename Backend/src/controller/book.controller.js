@@ -1,4 +1,4 @@
-import Book from "../model/books.model";
+import Book from "../model/books.model.js";
 import { functionHandler } from "../utils/functionHandler.js";
 import {
     CustomError,

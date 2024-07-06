@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
-import { InternalServerError } from "./ErrorHandler";
+import { InternalServerError } from "./ErrorHandler.js";
 dotenv.config({
     path: ".env",
 });
