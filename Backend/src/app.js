@@ -36,6 +36,7 @@ import bookRoute from "./routes/book.route.js";
 import addressRoute from "./routes/address.route.js";
 import cartRouter from "./routes/cart.route.js";
 import categoryRoute from "./routes/category.route.js";
+import orderRouter from "./routes/order.route.js";
 
 app.use("/api/v1/book", bookRoute);
 
@@ -47,4 +48,5 @@ app.use("/api/v1/address", addressRoute);
 
 app.use("/api/v1/admin/categories", categoryRoute);
 
+app.use("/api/v1/orders", orderRouter);
 export default app;
