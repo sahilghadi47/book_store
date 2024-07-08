@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { connectMongo } from "./config/db.config.js";
 import dotenv from "dotenv";
 import app from "./app.js";
