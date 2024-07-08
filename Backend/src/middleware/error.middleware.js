@@ -1,14 +1,19 @@
 import { CustomError } from "../utils/ErrorHandler.js";
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
     if (err instanceof CustomError) {
-        res.status(err.statusCode).json({
-            status: err.status,
+        return res.status(err.statusCode).json({
+            status: "error",
+            statusCode: err.statusCode,
             message: err.message,
-            error: err.error,
-            stack: err.stack,
+            errors: err.error,
         });
     }
-    next(err);
+
+    return res.status(500).json({
+        status: "error",
+        statusCode: 500,
+        message: "Internal Server Error",
+    });
 };
 export default errorHandler;
