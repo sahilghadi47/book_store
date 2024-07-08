@@ -26,7 +26,6 @@ app.use(
 app.use(express.static("public/temp"));
 
 // uses custom errorHandler midddleware
-app.use(errorHandler);
 
 app.get("/", (req, res) => {
     res.send("Hello World");
@@ -50,4 +49,7 @@ app.use("/api/v1/address", addressRoute);
 app.use("/api/v1/admin/categories", categoryRoute);
 
 app.use("/api/v1/orders", orderRouter);
+
+app.use(errorHandler);
+
 export default app;
