@@ -23,5 +23,5 @@ authRoute.patch("/update-password", verifyJwt, updatePassword);
 
 authRoute.patch("/update-role", verifyJwt, hasRole("admin"), updateUserRole);
 authRoute.get("/users", verifyJwt, hasRole("admin"), getAllUsers);
-authRoute.delete("/users/:id", verifyJwt, hasRole("admin"), deleteUser);
+authRoute.delete("/user/d/:id", verifyJwt, hasRole("admin"), deleteUser);
 export default authRoute;

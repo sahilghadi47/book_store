@@ -1,20 +1,20 @@
 class ResponseHandler {
-    constructor(statusCode = 200, message = "success", data = {}) {
+    constructor(statusCode = 200, message = "success", payload = {}) {
         this.statusCode = statusCode;
         this.message = message;
-        this.data = data;
+        this.payload = payload;
         this.success = statusCode >= 200 && statusCode < 400;
     }
 }
 
 class SuccessResponse extends ResponseHandler {
-    constructor(message, data = {}) {
-        super(200, message, data);
+    constructor(message, payload = {}) {
+        super(200, message, payload);
     }
 }
 class CreatedResponse extends ResponseHandler {
-    constructor(message, data = {}) {
-        super(201, message, data);
+    constructor(message, payload = {}) {
+        super(201, message, payload);
     }
 }
 export { SuccessResponse, CreatedResponse, ResponseHandler };

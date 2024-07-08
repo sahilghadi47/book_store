@@ -4,7 +4,7 @@ import {
     BadRequestError,
     CustomError,
     NotFoundError,
-    UnAuthorizedError,
+    UnauthorisedError,
     InternalServerError,
 } from "../utils/ErrorHandler.js";
 import {
@@ -18,7 +18,7 @@ const addAddress = functionHandler(async (req, res) => {
     try {
         const user = req.user;
         if (!user)
-            throw new UnAuthorizedError(
+            throw new UnauthorisedError(
                 "You must be logged in to add an address",
             );
 
@@ -56,7 +56,7 @@ const updateAddress = functionHandler(async (req, res) => {
     try {
         const user = req.user;
         if (!user)
-            throw new UnAuthorizedError(
+            throw new UnauthorisedError(
                 "You must be logged in to update an address",
             );
         const { addressId } = req.params;
@@ -87,7 +87,7 @@ const deleteAddress = functionHandler(async (req, res) => {
     try {
         const user = req.user;
         if (!user)
-            throw new UnAuthorizedError(
+            throw new UnauthorisedError(
                 "You must be logged in to delete an address",
             );
         const { addressId } = req.params;

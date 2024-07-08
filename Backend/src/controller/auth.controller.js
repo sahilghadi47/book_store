@@ -13,6 +13,7 @@ import {
 } from "../utils/ErrorHandler.js";
 import { cookieOptions } from "../constants.js";
 import generateTokens from "../utils/generateTokens.js";
+import { isValidObjectId } from "mongoose";
 
 const registerUser = functionHandler(async (req, res) => {
     try {
@@ -170,15 +171,17 @@ const updateUserRole = functionHandler(async (req, res) => {
         const userid = req.user?._id;
         if (!userid) throw new UnauthorisedError("User not found");
 
-        const { role } = req.body;
+        const { role, id } = req.body;
         if (!role)
             throw new BadRequestError("Please provide all the required fields");
 
-        const user = await User.findById(req.user._id);
+        if (!isValidObjectId(id))
+            throw new BadRequestError("Please provide valid user id");
+        const user = await User.findById(id);
         if (!user) throw new UnauthorisedError("User not found");
 
         user.role = role;
-        await user.save();
+        await user.save({ validateBeforeSave: false });
 
         const response = new Success(
             "Role successfully updated",
@@ -218,8 +221,8 @@ const deleteUser = functionHandler(async (req, res) => {
 
         if (!id) throw new BadRequestError("Please provide user id");
 
-        const user = await User.findByIdAndDelete(id);
-        const response = new Success("Users fetched successfully", user);
+        await User.findByIdAndDelete(id);
+        const response = new Success("Users deleted successfully");
 
         return res.status(200).json(response);
     } catch (error) {

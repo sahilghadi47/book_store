@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 // use cors middleware allow access control
 app.use(
     cors({
+        // eslint-disable-next-line no-undef
         origin: process.env.CORS,
         credentials: true,
     }),
