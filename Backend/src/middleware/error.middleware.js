@@ -1,6 +1,6 @@
 import { CustomError } from "../utils/ErrorHandler.js";
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
     if (err instanceof CustomError) {
         return res.status(err.statusCode).json({
             status: "error",
@@ -9,11 +9,6 @@ const errorHandler = (err, req, res) => {
             errors: err.error,
         });
     }
-
-    return res.status(500).json({
-        status: "error",
-        statusCode: 500,
-        message: "Internal Server Error",
-    });
+    next(err);
 };
 export default errorHandler;

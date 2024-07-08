@@ -10,7 +10,7 @@ const cartSchema = new mongoose.Schema(
         books: [
             {
                 booksID: {
-                    type: String,
+                    type: mongoose.Schema.ObjectId,
                     required: true,
                 },
                 quantity: {

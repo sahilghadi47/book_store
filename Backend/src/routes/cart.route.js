@@ -10,7 +10,7 @@ import { verifyJwt } from "../middleware/auth.middleware.js";
 cartRouter.use(verifyJwt);
 
 cartRouter.post("/addToCart", addToCart);
-cartRouter.delete("/delete/:id", removeFromCart);
+cartRouter.delete("/delete", removeFromCart);
 cartRouter.get("/cartItems", getCart);
 
 export default cartRouter;
